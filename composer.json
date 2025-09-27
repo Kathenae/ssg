@@ -1,6 +1,8 @@
 {
     "name": "kathenae/ssg",
     "type": "library",
+    "license": "BSD-3-Clause",
+    "minimum-stability": "dev",
     "autoload": {
         "psr-4": {
             "Kathenae\\SSG\\": "src/"
