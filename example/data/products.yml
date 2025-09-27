@@ -1,0 +1,109 @@
+-
+  id: 1
+  slug: wireless-bluetooth-headphones
+  name: Wireless Bluetooth Headphones
+  image_url: https://example.com/images/wireless-headphones.jpg
+  shop: first-shop
+  description: |
+    Premium over-ear wireless headphones with active noise cancellation.
+    Designed for long listening sessions with up to 30 hours of battery life.
+    Supports fast charging and has built-in voice assistant integration.
+
+-
+  id: 2
+  slug: smart-watch-pro
+  shop: first-shop
+  name: Smart Watch Pro
+  image_url: https://example.com/images/smart-watch-pro.jpg
+  description: |
+    Sleek smartwatch with fitness tracking, heart rate monitoring, and GPS.
+    Features a bright AMOLED display, customizable watch faces, and 7-day battery life.
+    Water-resistant up to 50 meters, making it perfect for workouts and swimming.
+
+-
+  id: 3
+  slug: ergonomic-office-chair
+  shop: first-shop
+  name: Ergonomic Office Chair
+  image_url: https://example.com/images/ergonomic-office-chair.jpg
+  description: |
+    Adjustable ergonomic office chair designed for maximum comfort.
+    Features lumbar support, breathable mesh, and 360-degree swivel wheels.
+    Ideal for both home offices and professional workspaces.
+
+-
+  id: 4
+  slug: gaming-laptop-x15
+  shop: first-shop
+  name: Gaming Laptop X15
+  image_url: https://example.com/images/gaming-laptop-x15.jpg
+  description: |
+    High-performance gaming laptop with a powerful graphics card and fast SSD.
+    Comes with a 15.6" 240Hz display, RGB backlit keyboard, and advanced cooling system.
+    Suitable for both gaming enthusiasts and creative professionals.
+
+-
+  id: 5
+  slug: stainless-steel-cookware-set
+  shop: first-shop
+  name: Stainless Steel Cookware Set
+  image_url: https://example.com/images/cookware-set.jpg
+  description: |
+    10-piece stainless steel cookware set with non-stick coating.
+    Includes pots, pans, and lids suitable for all stovetops, including induction.
+    Dishwasher safe and built to last for years of daily cooking.
+
+-
+  id: 6
+  slug: 4k-ultra-hd-smart-tv
+  shop: second-shop
+  name: 4K Ultra HD Smart TV
+  image_url: https://example.com/images/4k-smart-tv.jpg
+  description: |
+    55-inch 4K Ultra HD smart TV with HDR10+ and Dolby Vision support.
+    Features built-in streaming apps, voice control, and multiple HDMI ports.
+    Perfect for creating a cinematic experience at home.
+
+-
+  id: 7
+  slug: portable-solar-charger
+  shop: second-shop
+  name: Portable Solar Charger
+  image_url: https://example.com/images/portable-solar-charger.jpg
+  description: |
+    Lightweight solar-powered charger for phones, tablets, and USB devices.
+    Foldable design with high-efficiency solar panels for outdoor adventures.
+    Water-resistant and built to withstand tough conditions.
+
+-
+  id: 8
+  slug: electric-standing-desk
+  shop: second-shop
+  name: Electric Standing Desk
+  image_url: https://example.com/images/standing-desk.jpg
+  description: |
+    Height-adjustable electric standing desk with programmable memory settings.
+    Spacious tabletop with cable management system for a clutter-free workspace.
+    Promotes healthier posture and productivity during long work hours.
+
+-
+  id: 9
+  slug: robot-vacuum-cleaner
+  shop: second-shop
+  name: Robot Vacuum Cleaner
+  image_url: https://example.com/images/robot-vacuum.jpg
+  description: |
+    Smart robot vacuum cleaner with automatic mapping and scheduling.
+    Works on carpets, hardwood, and tiles with powerful suction.
+    Can be controlled via mobile app or voice assistants.
+
+-
+  id: 10
+  slug: noise-cancelling-earbuds
+  shop: second-shop
+  name: Noise Cancelling Earbuds
+  image_url: https://example.com/images/noise-cancelling-earbuds.jpg
+  description: |
+    Compact true wireless earbuds with industry-leading noise cancellation.
+    Up to 8 hours of battery life on a single charge, plus wireless charging case.
+    Sweat-resistant and perfect for commuting, workouts, or travel.

@@ -1,0 +1,19 @@
+{
+    "name": "kathenae/ssg",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Kathenae\\SSG\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Ronald",
+            "email": "RonaldWilsonMachado@gmail.com"
+        }
+    ],
+    "require": {
+        "symfony/yaml": "^7.3",
+        "twig/twig": "^3.21"
+    }
+}
