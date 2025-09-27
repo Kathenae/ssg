@@ -1,6 +1,6 @@
 {
     "name": "kathenae/ssg",
-    "type": "project",
+    "type": "library",
     "autoload": {
         "psr-4": {
             "Kathenae\\SSG\\": "src/"
