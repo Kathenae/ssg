@@ -2,6 +2,7 @@
 
 use Kathenae\SSG\Data;
 use Kathenae\SSG\Generator;
+use Kathenae\SSG\HttpHandler;
 use Kathenae\SSG\Page;
 use Kathenae\SSG\Renderer;
 use Kathenae\SSG\Request;
@@ -66,5 +67,11 @@ $routes->get('/shop/{shop}/view/{product}', function (Request $request) {
 
 chdir(__DIR__);
 $renderer = new Renderer('templates');
-$generator = new Generator($renderer);
-$generator->generate($routes);
+$ssgHandler = new Generator($renderer);
+$httphandler = new HttpHandler($renderer);
+
+if (PHP_SAPI === 'cli') {
+    $ssgHandler->generate($routes);
+} else {
+    $httphandler->handle($routes);
+}
