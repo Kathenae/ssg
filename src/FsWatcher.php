@@ -10,9 +10,9 @@ class FsWatcher
     {
     }
 
-    public function watch(callable $onChange, int $intervalSeconds = 2)
+    public function watch(callable $onChange, int $intervalSeconds = 2, $running = true)
     {
-        while (true) {
+        while ($running) {
             if ($this->hasChanges()) {
                 $onChange();
             }
