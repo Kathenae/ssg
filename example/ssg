@@ -1,6 +1,7 @@
 <?php
 
 use Kathenae\SSG\Data;
+use Kathenae\SSG\FsWatcher;
 use Kathenae\SSG\HttpHandler;
 use Kathenae\SSG\Renderer;
 use Kathenae\SSG\SSGHandler;
@@ -13,13 +14,21 @@ Data::useDirectory("data");
 $renderer = new Renderer('templates');
 
 if (PHP_SAPI === 'cli') {
-    $ssgHandler = new SSGHandler(
-        $renderer,
-        $router,
-        'public',
-        'assets'
-    );
-    $ssgHandler->handle();
+    $watcher = new FsWatcher(__DIR__, [__DIR__ . '/public']);
+    $watcher->watch(function () use ($renderer, $router) {
+        print ("\nStarting SSG generation...\n\n");
+        $startTime = microtime(true);
+        $ssgHandler = new SSGHandler(
+            $renderer,
+            $router,
+            'public',
+            'assets'
+        );
+        $ssgHandler->handle();
+        $endTime = microtime(true);
+        $duration = $endTime - $startTime;
+        printf("\nSSG generation completed in %.2f seconds.\n", $duration);
+    });
 } else {
     $httphandler = new HttpHandler(
         $renderer,
