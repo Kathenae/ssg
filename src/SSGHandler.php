@@ -22,7 +22,6 @@ class SSGHandler
     {
         foreach ($this->router->all() as $route) {
             if ($route->getMethod() != 'GET') {
-                print ("⚠️  {$route->getOriginalPattern()} - Skipped {$route->getMethod()}\n");
                 continue;
             }
 
@@ -73,10 +72,14 @@ class SSGHandler
 
             try {
                 $response = $route->handle($request);
-                $this->compile($response, $request);
-                printf("✅ %s - Generated\n", $request->getUri());
+                if ($response instanceof Page) {
+                    $this->compile($response, $request);
+                    printf("✅ %s\n", $request->getUri());
+                } else {
+                    printf("⚠️  %s - Must return an instance of Page::class \n", $request->getUri());
+                }
             } catch (\Throwable $e) {
-                printf("⚠️  Failed to generate %s: %s\n", $request->getUri(), $e->getMessage());
+                printf("⚠️  %s - %s\n", $request->getUri(), $e->getMessage());
             }
         }
     }
