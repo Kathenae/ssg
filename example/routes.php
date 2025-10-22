@@ -1,0 +1,62 @@
+<?php
+
+use Kathenae\SSG\Data;
+use Kathenae\SSG\Page;
+use Kathenae\SSG\Request;
+use Kathenae\SSG\Router;
+
+$routes = new Router();
+
+$routes->get('/', function (Request $request) {
+    return Page::make('home.twig');
+})->withSsg();
+
+$routes->get('/contact', function (Request $request) {
+    return Page::make('contact.twig');
+})->withSsg();
+
+$routes->post('/contact', function (Request $request) {
+});
+
+$routes->get('/products', function (Request $request) {
+    $products = Data::load('products')->all();
+    return Page::make('product-list.twig')
+        ->with('products', $products);
+})->withSsg();
+
+$routes->get('/products/{product}', function (Request $request) {
+    $product = Data::load('products')
+        ->where('slug', $request->getRouteParam('product'))
+        ->first();
+
+    return Page::make('product-detail.twig')
+        ->with('product', $product);
+
+})->withSsg(
+        fn() => Data::load('products')->map(fn($p) => [
+            'product' => $p['slug']
+        ])->all()
+    );
+
+$routes->get('/shop/{shop}/view/{product}', function (Request $request) {
+    $shop = Data::load('shops')
+        ->where('slug', $request->getRouteParam('shop'))
+        ->first();
+
+    $product = Data::load('products')
+        ->where('shop', $request->getRouteParam('shop'))
+        ->where('slug', $request->getRouteParam('product'))
+        ->first();
+
+    return Page::make('product-detail.twig')
+        ->with('shop', $shop)
+        ->with('product', $product);
+
+})->withSsg(
+        fn() => Data::load('shops')->map(fn($shop) => [
+            'shop' => $shop['slug'],
+            'product' => Data::load('products')->where('shop', $shop['slug'])->pluck('slug')
+        ])->all()
+    );
+
+return $routes;

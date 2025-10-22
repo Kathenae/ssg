@@ -2,36 +2,35 @@
 
 namespace Kathenae\SSG;
 
-class Generator
+class SSGHandler
 {
     public function __construct(
         private Renderer $renderer,
-        private string $outputDir = 'public'
+        private Router $router,
+        private string $outputDir = 'public',
+        private string $assetsDir = 'assets'
     ) {
     }
 
-    public function generate(Router $routes)
+    public function handle()
     {
-        foreach ($routes->all() as $route) {
+        $this->collectPages();
+        $this->collectAssets();
+    }
+
+    private function collectPages()
+    {
+        foreach ($this->router->all() as $route) {
             if ($route->getMethod() != 'GET') {
                 print ("⚠️  {$route->getOriginalPattern()} - Skipped {$route->getMethod()}\n");
                 continue;
             }
 
-            $requests = $this->collectSsg($route);
-            foreach ($requests as $request) {
-                try {
-                    $response = $route->handle($request);
-                    $this->compile($response, $request);
-                    printf("✅ %s - Generated\n", $request->getUri());
-                } catch (\Throwable $e) {
-                    printf("⚠️  Failed to generate %s: %s\n", $request->getUri(), $e->getMessage());
-                }
-            }
+            $this->renderPage($route);
         }
     }
 
-    function collectSsg(Route $route)
+    function renderPage(Route $route)
     {
         if (!$route->isSsgEnabled()) {
             return [];
@@ -66,24 +65,42 @@ class Generator
                 $uri = str_replace("{{$key}}", $value, $uri);
             }
 
-            $requests[] = new Request([
+            $request = new Request([
                 'method' => $route->getMethod(),
                 'uri' => $uri,
                 'params' => $params,
             ]);
-        }
 
-        return $requests;
+            try {
+                $response = $route->handle($request);
+                $this->compile($response, $request);
+                printf("✅ %s - Generated\n", $request->getUri());
+            } catch (\Throwable $e) {
+                printf("⚠️  Failed to generate %s: %s\n", $request->getUri(), $e->getMessage());
+            }
+        }
+    }
+
+    function collectAssets()
+    {
+        // Read all files from assetsDir and copy to outputDir/assets
+        $sourceDir = $this->assetsDir;
+        $destDir = $this->outputDir . DIRECTORY_SEPARATOR . 'assets';
+
+        // Create destination directory if it doesn't exist
+        FsUtil::ensureDir($destDir);
+        FsUtil::rrmdir($destDir);
+        FsUtil::rcopy($sourceDir, $destDir);
     }
 
     private function compile(Page $page, Request $req)
     {
         $output = $this->renderer->render($page);
         $url = rtrim(ltrim($req->getUri(), DIRECTORY_SEPARATOR), DIRECTORY_SEPARATOR);
-        $outputPath = $this->outputDir . DIRECTORY_SEPARATOR . $url . ".html";
-        if ($url == "") {
-            $outputPath = $this->outputDir . DIRECTORY_SEPARATOR . "index.html";
-        }
+        $outputPath = $this->outputDir . DIRECTORY_SEPARATOR . $url . DIRECTORY_SEPARATOR . "index.html";
+        // if ($url == "") {
+        //     $outputPath = $this->outputDir . DIRECTORY_SEPARATOR . "index.html";
+        // }
         $outputDir = dirname($outputPath);
         if (!is_dir($outputDir)) {
             mkdir($outputDir, recursive: true);

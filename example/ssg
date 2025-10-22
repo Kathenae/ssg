@@ -1,77 +1,29 @@
 <?php
 
 use Kathenae\SSG\Data;
-use Kathenae\SSG\Generator;
 use Kathenae\SSG\HttpHandler;
-use Kathenae\SSG\Page;
 use Kathenae\SSG\Renderer;
-use Kathenae\SSG\Request;
-use Kathenae\SSG\Router;
-
-require_once("vendor/autoload.php");
-
-$routes = new Router();
-
-$routes->get('/', function (Request $request) {
-    return Page::make('home.twig');
-})->withSsg();
-
-$routes->get('/contact', function (Request $request) {
-    return Page::make('contact.twig');
-})->withSsg();
-
-$routes->post('/contact', function (Request $request) {
-
-});
-
-$routes->get('/products', function (Request $request) {
-    $products = Data::load('products');
-    return Page::make('product-list.twig')
-        ->with('products', $products);
-})->withSsg();
-
-$routes->get('/products/{product}', function (Request $request) {
-    $product = Data::load('products')
-        ->where('slug', $request->getRouteParam('product'))
-        ->first();
-
-    return Page::make('product-detail.twig')
-        ->with('product', $product);
-
-})->withSsg(
-        fn() => Data::load('products')->map(fn($p) => [
-            'product' => $p['slug']
-        ])->all()
-    );
-
-$routes->get('/shop/{shop}/view/{product}', function (Request $request) {
-    $shop = Data::load('shops')
-        ->where('slug', $request->getRouteParam('shop'))
-        ->first();
-
-    $product = Data::load('products')
-        ->where('shop', $request->getRouteParam('shop'))
-        ->where('slug', $request->getRouteParam('product'))
-        ->first();
-
-    return Page::make('product-detail.twig')
-        ->with('shop', $shop)
-        ->with('product', $product);
-
-})->withSsg(
-        fn() => Data::load('shops')->map(fn($shop) => [
-            'shop' => $shop['slug'],
-            'product' => Data::load('products')->where('shop', $shop['slug'])->pluck('slug')
-        ])->all()
-    );
+use Kathenae\SSG\SSGHandler;
 
 chdir(__DIR__);
+require_once("../vendor/autoload.php");
+$router = require_once 'routes.php';
+
+Data::useDirectory("data");
 $renderer = new Renderer('templates');
-$ssgHandler = new Generator($renderer);
-$httphandler = new HttpHandler($renderer);
 
 if (PHP_SAPI === 'cli') {
-    $ssgHandler->generate($routes);
+    $ssgHandler = new SSGHandler(
+        $renderer,
+        $router,
+        'public',
+        'assets'
+    );
+    $ssgHandler->handle();
 } else {
-    $httphandler->handle($routes);
+    $httphandler = new HttpHandler(
+        $renderer,
+        $router
+    );
+    $httphandler->handle();
 }
