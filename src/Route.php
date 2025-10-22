@@ -12,7 +12,7 @@ class Route
     private Closure $handler;
 
     // SSG attributes
-    private ?Closure $staticParams;
+    private ?Closure $staticParams = null;
 
     public function __construct(string $method, string $pattern, Closure $handler)
     {
